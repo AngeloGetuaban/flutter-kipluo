@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      # This package is built by removing premium widgets from a larger source, which can leave
+      # imports only those widgets used. The release script applies the same fix before publishing.
+      - name: Drop imports left over from the free build
+        run: dart fix --apply --code=unused_import --code=unnecessary_import
+      # Infos (such as Flutter's move of Material to package:material_ui) are reported, not fatal.
+      - run: flutter analyze --no-fatal-infos
+      - run: flutter test
+      - name: pub.dev dry run
+        run: dart pub publish --dry-run
