@@ -1,6 +1,6 @@
 name: kipluo
 description: Interactive Flutter widgets with spring physics, touch gestures and synthesized spatial sound. Toggles, sliders, charts, loaders and animated icons.
-version: 0.1.0
+version: 0.1.1
 homepage: https://kipluo.com
 repository: https://github.com/AngeloGetuaban/flutter-kipluo
 issue_tracker: https://github.com/AngeloGetuaban/flutter-kipluo/issues
@@ -9,7 +9,7 @@ topics: [animation, physics, widget, ui, sound]
 
 environment:
   sdk: ^3.10.3
-  flutter: ">=1.17.0"
+  flutter: ">=3.38.0"
 
 dependencies:
   flutter:
