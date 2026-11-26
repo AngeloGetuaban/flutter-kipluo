@@ -22,5 +22,8 @@ jobs:
       # Infos (such as Flutter's move of Material to package:material_ui) are reported, not fatal.
       - run: flutter analyze --no-fatal-infos
       - run: flutter test
+      # pub warns about modified files, so commit the fix inside the runner first (never pushed).
       - name: pub.dev dry run
-        run: dart pub publish --dry-run
+        run: |
+          git -c user.name=ci -c user.email=ci@localhost commit -qam "dart fix" || true
+          dart pub publish --dry-run
