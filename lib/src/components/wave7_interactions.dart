@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/theme.dart';
 
@@ -19,7 +18,6 @@ class SpotlightBentoCard extends StatefulWidget {
 class _SpotlightBentoCardState extends State<SpotlightBentoCard> {
   Offset _spot = const Offset(118, 56);
   int _clicks = 0;
-  int _burst = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,6 @@ class _SpotlightBentoCardState extends State<SpotlightBentoCard> {
         onTap: () {
           setState(() {
             _clicks++;
-            _burst++;
           });
           KipluoSound.play(KSound.pop, at: context, pitch: notePitch(_clicks % 5), volume: 0.48, componentEnabled: widget.sound);
         },
@@ -56,7 +53,6 @@ class _SpotlightBentoCardState extends State<SpotlightBentoCard> {
                   ),
                 ),
               ),
-              Center(child: KipluoAuraBurst(burstKey: _burst, size: 108, rays: 10)),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(

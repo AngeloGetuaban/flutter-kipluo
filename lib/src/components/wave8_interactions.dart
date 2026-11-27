@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/theme.dart';
 
@@ -17,7 +16,6 @@ class SignaturePad extends StatefulWidget {
 class _SignaturePadState extends State<SignaturePad> {
   final List<Offset?> _pts = [];
   bool _saved = false;
-  int _burst = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,6 @@ class _SignaturePadState extends State<SignaturePad> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  KipluoAuraBurst(burstKey: _burst, size: 110, rays: 10, color: t.ok),
                   CustomPaint(size: const Size(244, 86), painter: _SigPainter(pts: _pts, line: t.line)),
                   if (_pts.isEmpty) Text('Sign here…', style: TextStyle(fontSize: 11, color: t.line.withValues(alpha: 0.45))),
                 ],
@@ -69,7 +66,6 @@ class _SignaturePadState extends State<SignaturePad> {
                 onTap: () {
                   setState(() {
                     _saved = true;
-                    _burst++;
                   });
                   KipluoSound.play(KSound.chime, at: context, volume: 0.55, componentEnabled: widget.sound);
                 },

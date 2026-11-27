@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/spring.dart';
 import '../core/springs.dart';
@@ -121,7 +120,6 @@ class _SpringDrawerHandleState extends State<SpringDrawerHandle> with SingleTick
                         alignment: Alignment.center,
                         clipBehavior: Clip.none,
                         children: [
-                          KipluoAuraBurst(burstKey: _burst, size: 58, rays: 8),
                           Container(
                             width: 44,
                             height: 6,
@@ -241,7 +239,6 @@ class _SpringSplitPaneState extends State<SpringSplitPane> with SingleTickerProv
                             alignment: Alignment.center,
                             clipBehavior: Clip.none,
                             children: [
-                              KipluoAuraBurst(burstKey: _burst, size: 54, rays: 8),
                               Container(width: 3, height: 28, decoration: BoxDecoration(color: t.line, borderRadius: BorderRadius.circular(99))),
                             ],
                           ),

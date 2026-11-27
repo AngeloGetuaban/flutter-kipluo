@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/spring.dart';
 import '../core/springs.dart';
@@ -23,7 +22,6 @@ class _StackedBarChartState extends State<StackedBarChart> {
   static const _web = [36.0, 44.0, 38.0, 52.0, 48.0];
   static const _fl = [24.0, 28.0, 34.0, 30.0, 36.0];
   String? _isolated;
-  int _burst = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,6 @@ class _StackedBarChartState extends State<StackedBarChart> {
                 alignment: Alignment.center,
                 clipBehavior: Clip.none,
                 children: [
-                  KipluoAuraBurst(burstKey: _burst, size: 52, rays: 8),
                   Row(
                     children: [('web', 'Web', t.accent), ('fl', 'Dart', t.ok)].map((s) {
                       final on = _isolated == s.$1;
@@ -50,7 +47,6 @@ class _StackedBarChartState extends State<StackedBarChart> {
                         onTap: () {
                           setState(() {
                             _isolated = on ? null : s.$1;
-                            _burst++;
                           });
                           KipluoSound.play(KSound.pop, at: context, volume: 0.45, componentEnabled: widget.sound);
                         },
@@ -81,9 +77,9 @@ class _StackedBarChartState extends State<StackedBarChart> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        AnimatedContainer(duration: const Duration(milliseconds: 240), height: hf, decoration: BoxDecoration(color: t.ok, borderRadius: const BorderRadius.vertical(top: Radius.circular(4)))),
+                        AnimatedContainer(duration: const Duration(milliseconds: 300), curve: Curves.easeOutBack, height: hf, decoration: BoxDecoration(color: t.ok, borderRadius: const BorderRadius.vertical(top: Radius.circular(4)))),
                         const SizedBox(height: 2),
-                        AnimatedContainer(duration: const Duration(milliseconds: 240), height: hw, decoration: BoxDecoration(color: t.accent, borderRadius: const BorderRadius.vertical(bottom: Radius.circular(4)))),
+                        AnimatedContainer(duration: const Duration(milliseconds: 300), curve: Curves.easeOutBack, height: hw, decoration: BoxDecoration(color: t.accent, borderRadius: const BorderRadius.vertical(bottom: Radius.circular(4)))),
                       ],
                     ),
                   ),

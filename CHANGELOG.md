@@ -1,3 +1,8 @@
+## 0.3.1
+
+- Removed the line-release burst from the wave 6-8 charts, controls, interactions, feedback and number widgets. `KnobAngleDial` now fires a small line bump at the needle tip when it settles.
+- Dual Radar Compare is larger with clearer grid lines and distinct React and Flutter profiles.
+
 ## 0.3.0
 
 - 21 new free widgets and loaders: `SpringDrawerHandle`, `SpringSplitPane`, `SpringDateStrip`, `SpringMultiSelect`, `SpringAreaSpark`, `MilestoneOdometer`, `InlineConfirmPill`, `SpotlightBentoCard`, `SpringCombobox`, `TactileRadioCards`, `StackedBarChart`, `BatteryLevelMeter`, `BannerAnnouncement`, `PendulumCradleLoader`, `SignaturePad`, `SpringColorSwatches`, `PillFilterBar`, `WaterfallDeltaChart`, `CountdownBlocks`, `StepChecklistCard` and `VinylSpinLoader`.

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/theme.dart';
 
@@ -17,7 +16,6 @@ class CountdownBlocks extends StatefulWidget {
 
 class _CountdownBlocksState extends State<CountdownBlocks> {
   late int _sec = widget.initialSeconds;
-  int _burst = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,6 @@ class _CountdownBlocksState extends State<CountdownBlocks> {
           alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            KipluoAuraBurst(burstKey: _burst, size: 110, rays: 10, color: t.ok),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: blocks.map((b) {
@@ -59,7 +56,6 @@ class _CountdownBlocksState extends State<CountdownBlocks> {
           onTap: () {
             setState(() {
               _sec = _sec == 0 ? widget.initialSeconds : (_sec - 1).clamp(0, 999);
-              if (_sec == 0) _burst++;
             });
             KipluoSound.play(_sec == 0 ? KSound.sparkle : KSound.tick, at: context, volume: 0.45, componentEnabled: widget.sound);
           },

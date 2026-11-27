@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/theme.dart';
 
@@ -17,7 +16,6 @@ class BannerAnnouncement extends StatefulWidget {
 
 class _BannerAnnouncementState extends State<BannerAnnouncement> {
   bool _visible = true;
-  int _burst = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,6 @@ class _BannerAnnouncementState extends State<BannerAnnouncement> {
         alignment: Alignment.center,
         clipBehavior: Clip.none,
         children: [
-          KipluoAuraBurst(burstKey: _burst, size: 100, rays: 8),
           if (_visible)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -56,7 +53,6 @@ class _BannerAnnouncementState extends State<BannerAnnouncement> {
               onTap: () {
                 setState(() {
                   _visible = true;
-                  _burst++;
                 });
                 KipluoSound.play(KSound.whoosh, at: context, volume: 0.45, componentEnabled: widget.sound);
               },

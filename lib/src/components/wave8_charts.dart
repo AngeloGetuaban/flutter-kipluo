@@ -2,8 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
+import '../core/spring.dart';
+import '../core/springs.dart';
 import '../core/theme.dart';
 
 /* 40. Waterfall Delta Chart (Free) */
@@ -18,7 +19,6 @@ class WaterfallDeltaChart extends StatefulWidget {
 
 class _WaterfallDeltaChartState extends State<WaterfallDeltaChart> {
   int _q = 0;
-  int _burst = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,6 @@ class _WaterfallDeltaChartState extends State<WaterfallDeltaChart> {
                 alignment: Alignment.center,
                 clipBehavior: Clip.none,
                 children: [
-                  KipluoAuraBurst(burstKey: _burst, size: 50, rays: 8),
                   Row(
                     children: ['Q3', 'Q4'].asMap().entries.map((e) {
                       final on = _q == e.key;
@@ -48,7 +47,6 @@ class _WaterfallDeltaChartState extends State<WaterfallDeltaChart> {
                         onTap: () {
                           setState(() {
                             _q = e.key;
-                            _burst++;
                           });
                           KipluoSound.play(KSound.drop, at: context, volume: 0.45, componentEnabled: widget.sound);
                         },
@@ -76,7 +74,8 @@ class _WaterfallDeltaChartState extends State<WaterfallDeltaChart> {
                     child: Stack(
                       children: [
                         AnimatedPositioned(
-                          duration: const Duration(milliseconds: 240),
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOutBack,
                           left: 0,
                           right: 0,
                           bottom: b.$1,

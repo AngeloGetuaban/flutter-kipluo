@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/theme.dart';
 
@@ -17,7 +16,6 @@ class StepChecklistCard extends StatefulWidget {
 class _StepChecklistCardState extends State<StepChecklistCard> {
   static const _labels = ['Install core', 'Enable SFX', 'Ship Flutter'];
   final List<bool> _done = [true, false, false];
-  int _burst = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,6 @@ class _StepChecklistCardState extends State<StepChecklistCard> {
         alignment: Alignment.center,
         clipBehavior: Clip.none,
         children: [
-          KipluoAuraBurst(burstKey: _burst, size: 112, rays: 12, color: t.ok),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -53,7 +50,6 @@ class _StepChecklistCardState extends State<StepChecklistCard> {
                   onTap: () {
                     setState(() {
                       _done[i] = !_done[i];
-                      if (_done.every((e) => e)) _burst++;
                     });
                     KipluoSound.play(_done.every((e) => e) ? KSound.chime : KSound.pop, at: context, volume: 0.45, componentEnabled: widget.sound);
                   },

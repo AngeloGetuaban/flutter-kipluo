@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/spring.dart';
 import '../core/springs.dart';
@@ -20,7 +19,6 @@ class MilestoneOdometer extends StatefulWidget {
 class _MilestoneOdometerState extends State<MilestoneOdometer> with SingleTickerProviderStateMixin {
   static const _marks = [1000, 5000, 10000];
   late int _target = widget.initialValue;
-  int _burst = 0;
   late final KSprings _s = KSprings(vsync: this, initial: {'n': _target.toDouble()}, config: SpringConfig.snappy);
 
   @override
@@ -34,7 +32,6 @@ class _MilestoneOdometerState extends State<MilestoneOdometer> with SingleTicker
     final crossed = _marks.any((m) => _target < m && next >= m);
     setState(() {
       _target = next;
-      if (crossed) _burst++;
     });
     _s.animateTo({'n': next.toDouble()});
     KipluoSound.play(crossed ? KSound.sparkle : KSound.tick, at: context, volume: 0.5, componentEnabled: widget.sound);
@@ -55,7 +52,6 @@ class _MilestoneOdometerState extends State<MilestoneOdometer> with SingleTicker
         alignment: Alignment.center,
         clipBehavior: Clip.none,
         children: [
-          KipluoAuraBurst(burstKey: _burst, size: 120, rays: 12),
           AnimatedBuilder(
             animation: _s,
             builder: (_, _) {

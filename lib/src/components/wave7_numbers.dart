@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/spring.dart';
 import '../core/springs.dart';
@@ -19,13 +18,11 @@ class BatteryLevelMeter extends StatefulWidget {
 
 class _BatteryLevelMeterState extends State<BatteryLevelMeter> {
   late int _level = widget.initialLevel;
-  int _burst = 0;
 
   void _set(int next) {
     final c = next.clamp(0, 100);
     setState(() {
       _level = c;
-      if (c == 100) _burst++;
     });
     KipluoSound.play(c == 100 ? KSound.ding : KSound.tick, at: context, volume: 0.45, componentEnabled: widget.sound);
   }
@@ -42,7 +39,6 @@ class _BatteryLevelMeterState extends State<BatteryLevelMeter> {
           alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            KipluoAuraBurst(burstKey: _burst, size: 112, rays: 10, color: t.ok),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/theme.dart';
 
@@ -20,7 +19,6 @@ class InlineConfirmPill extends StatefulWidget {
 
 class _InlineConfirmPillState extends State<InlineConfirmPill> {
   String _stage = 'idle';
-  int _burst = 0;
   Timer? _timer;
 
   @override
@@ -42,7 +40,6 @@ class _InlineConfirmPillState extends State<InlineConfirmPill> {
     _timer?.cancel();
     setState(() {
       _stage = 'done';
-      _burst++;
     });
     widget.onConfirm?.call();
     KipluoSound.play(KSound.chime, at: context, volume: 0.55, componentEnabled: widget.sound);
@@ -58,7 +55,6 @@ class _InlineConfirmPillState extends State<InlineConfirmPill> {
       alignment: Alignment.center,
       clipBehavior: Clip.none,
       children: [
-        KipluoAuraBurst(burstKey: _burst, size: 104, rays: 10, color: t.ok),
         if (_stage == 'idle')
           GestureDetector(
             onTap: _arm,

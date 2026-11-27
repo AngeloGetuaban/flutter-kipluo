@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/spring.dart';
 import '../core/springs.dart';
@@ -25,7 +24,6 @@ class _SpringAreaSparkState extends State<SpringAreaSpark> with SingleTickerProv
     [45.0, 52.0, 48.0, 62.0, 74.0, 69.0, 86.0],
   ];
   int _idx = 0;
-  int _burst = 0;
   late final KSprings _s = KSprings(
     vsync: this,
     initial: {'a': 28, 'b': 42, 'c': 39, 'd': 64, 'e': 58, 'f': 82, 'g': 91},
@@ -41,7 +39,6 @@ class _SpringAreaSparkState extends State<SpringAreaSpark> with SingleTickerProv
   void _pick(int i) {
     setState(() {
       _idx = i;
-      _burst++;
     });
     final d = _sets[i];
     _s.reducedMotion = kipluoReducedMotion(context);
@@ -79,7 +76,6 @@ class _SpringAreaSparkState extends State<SpringAreaSpark> with SingleTickerProv
                 alignment: Alignment.center,
                 clipBehavior: Clip.none,
                 children: [
-                  KipluoAuraBurst(burstKey: _burst, size: 54, rays: 8),
                   Row(
                     children: ['7D', '30D'].asMap().entries.map((e) {
                       final on = _idx == e.key;
