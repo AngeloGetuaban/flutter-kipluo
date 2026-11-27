@@ -2,7 +2,7 @@
 
 Interactive Flutter widgets with real spring physics, touch gestures and synthesized spatial sound. They keep behaving when people drag, fling, spam and interrupt them.
 
-This package is the free part of [Kipluo](https://kipluo.com): the engine plus 61 free widgets and loaders and 638 free animated icons. Premium widgets install as Dart source from [kipluo.com](https://kipluo.com/pricing).
+This package is the free part of [Kipluo](https://kipluo.com): the engine plus 64 free widgets and loaders and 638 free animated icons. Premium widgets install as Dart source from [kipluo.com](https://kipluo.com/pricing).
 
 ```bash
 flutter pub add kipluo
@@ -30,7 +30,7 @@ KipluoTheme(
 - **Controls:** SpringToggle, AnimatedTabs, StepperInput, StarRating, JellyCheckbox, OtpInput, SpringSegmentedControl, TagChipInput, PullChainToggle, SpringDateStrip, SpringMultiSelect, SpringCombobox, TactileRadioCards, SpringColorSwatches, PillFilterBar
 - **Numbers:** RollingCounter, SpringBadgeCount, CountUpStat, CountdownRing, SlotMachineCounter, MilestoneOdometer, BatteryLevelMeter, CountdownBlocks
 - **Charts:** DonutProgress, SpringSparkline, StackedProgressBar, SpringWaffleChart, SpringAreaSpark, StackedBarChart, WaterfallDeltaChart
-- **Loaders:** WormLoader, PixelProgressLoader, PaperPlaneLoader, TypingIndicator, BouncingCubeLoader, HourglassSandLoader, PendulumCradleLoader, VinylSpinLoader
+- **Loaders:** WormLoader, PixelProgressLoader, PaperPlaneLoader, TypingIndicator, BouncingCubeLoader, HourglassSandLoader, PendulumCradleLoader, VinylSpinLoader, IsometricCubeGridLoader, BrickBar3DLoader, KineticSpheres3DLoader
 - **Icons:** free bespoke icons such as `KBellIcon()` and `KHeartIcon()`, plus the free icon pack: `KipluoIcon.bySlug('user-icon')`
 
 Browse all of them, live, at [kipluo.com/browse](https://kipluo.com/browse).

@@ -1,3 +1,9 @@
+## 0.4.0
+
+- First 3D loaders, with no extra dependencies: `IsometricCubeGridLoader`, `BrickBar3DLoader` and `KineticSpheres3DLoader`. Drag to orbit them; determinate progress, complete and error states, reduced motion and Playful / Minimal / Mono styles all work.
+- New `iso3d` core: isometric and perspective projection with depth-sorted faces, used by the 3D loaders.
+- Premium addition (install with `npx kipluo add wireframe-prism-loader --flutter`): Wireframe Prism.
+
 ## 0.3.2
 
 - Subtler `KipluoAuraBurst`: thinner lines and a shorter, quicker animation.

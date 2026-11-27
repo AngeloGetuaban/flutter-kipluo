@@ -4,6 +4,7 @@ library;
 
 // Core engine
 export 'src/core/aura_fx.dart';
+export 'src/core/iso3d.dart';
 export 'src/core/sound/sound.dart';
 export 'src/core/spring.dart';
 export 'src/core/springs.dart';
@@ -92,6 +93,7 @@ export 'src/loaders/typing_indicator.dart';
 export 'src/loaders/wave4_loaders.dart';
 export 'src/loaders/wave7_loaders.dart';
 export 'src/loaders/wave8_loaders.dart';
+export 'src/loaders/wave9_loaders.dart';
 export 'src/loaders/worm_loader.dart';
 
 // Animated Icons (100 bespoke + 2,000 curated pack = 2,100 total)
