@@ -1,8 +1,8 @@
 part of 'icon_shell.dart';
 
 // Free icons from the Kipluo icon pack. Paid icons install with `npx kipluo add <name> --flutter`.
-const int kipluoBespokeIconCount = 36;
-const int kipluoTotalIconCount = 1036;
+const int kipluoBespokeIconCount = 44;
+const int kipluoTotalIconCount = 1044;
 
 const List<KIconSpec> kipluoIconPack = [
   KIconSpec._(slug: 'user-icon', title: 'User Icon', icon: Icons.person_rounded, tier: KIconTier.free, motion: KIconMotion.squish, useCases: ['Dashboards', 'Navigation']),

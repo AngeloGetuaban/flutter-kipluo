@@ -7,13 +7,17 @@ import '../core/spring.dart';
 import '../core/springs.dart';
 import '../core/theme.dart';
 import 'bespoke_icons_v2.dart';
+import 'bespoke_icons_v3.dart';
 import 'icon_shell.dart';
 
 export 'bespoke_icons_v2.dart'
     show
         KHomeIcon, KFolderIcon, KCalendarIcon, KClockIcon, KEyeIcon, KThumbsUpIcon, KRefreshIcon, KUploadIcon, kipluoBespokeV2Icons;
+export 'bespoke_icons_v3.dart'
+    show
+        KUmbrellaPopIcon, KWifiPulseIcon, KRainCloudIcon, KDropPinIcon, kipluoBespokeV3Icons;
 
-/// Metadata for all 36 bespoke multi-part animated icons (16 v1 + 20 v2).
+/// Metadata for all 44 bespoke multi-part animated icons (16 v1 + 20 v2 + 8 v3).
 const List<({String slug, String title, KIconTier tier})> kipluoBespokeIcons = [
   (slug: 'bell-icon', title: 'Bell Icon', tier: KIconTier.free),
   (slug: 'heart-icon', title: 'Heart Icon', tier: KIconTier.free),
@@ -32,6 +36,7 @@ const List<({String slug, String title, KIconTier tier})> kipluoBespokeIcons = [
   (slug: 'wand-icon', title: 'Wand Icon', tier: KIconTier.premium),
   (slug: 'paw-icon', title: 'Cat Paw Icon', tier: KIconTier.premium),
   ...kipluoBespokeV2Icons,
+  ...kipluoBespokeV3Icons,
 ];
 
 abstract class _BaseBespokeIcon extends StatefulWidget {

@@ -2,7 +2,7 @@
 
 Interactive Flutter widgets with real spring physics, touch gestures and synthesized spatial sound. They keep behaving when people drag, fling, spam and interrupt them.
 
-This package is the free part of [Kipluo](https://kipluo.com): the engine plus 36 free widgets and loaders and 314 free animated icons. Premium widgets install as Dart source from [kipluo.com](https://kipluo.com/pricing).
+This package is the free part of [Kipluo](https://kipluo.com): the engine plus 40 free widgets and loaders and 318 free animated icons. Premium widgets install as Dart source from [kipluo.com](https://kipluo.com/pricing).
 
 ```bash
 flutter pub add kipluo
@@ -25,11 +25,11 @@ KipluoTheme(
 
 ## What's free
 
-- **Interactions:** MagneticSurface, HoldToConfirm, TiltCard, ElasticAccordion, SwipeToUnlock, InfiniteMarquee, ExpandableSearchPill
-- **Feedback:** FavoriteToggle, CopyFeedback, ConfettiBurst, ShakeInput, SuccessCheck, ReactionPickerBar, InlineStatusPill
-- **Controls:** SpringToggle, AnimatedTabs, StepperInput, StarRating, JellyCheckbox, OtpInput, SpringSegmentedControl, TagChipInput
+- **Interactions:** MagneticSurface, HoldToConfirm, TiltCard, ElasticAccordion, SwipeToUnlock, InfiniteMarquee, ExpandableSearchPill, ElasticStepTracker
+- **Feedback:** FavoriteToggle, CopyFeedback, ConfettiBurst, ShakeInput, SuccessCheck, ReactionPickerBar, InlineStatusPill, SpringTooltip
+- **Controls:** SpringToggle, AnimatedTabs, StepperInput, StarRating, JellyCheckbox, OtpInput, SpringSegmentedControl, TagChipInput, PullChainToggle
 - **Numbers:** RollingCounter, SpringBadgeCount, CountUpStat, CountdownRing, SlotMachineCounter
-- **Charts:** DonutProgress, SpringSparkline, StackedProgressBar
+- **Charts:** DonutProgress, SpringSparkline, StackedProgressBar, SpringWaffleChart
 - **Loaders:** WormLoader, PixelProgressLoader, PaperPlaneLoader, TypingIndicator, BouncingCubeLoader, HourglassSandLoader
 - **Icons:** free bespoke icons such as `KBellIcon()` and `KHeartIcon()`, plus the free icon pack: `KipluoIcon.bySlug('user-icon')`
 
