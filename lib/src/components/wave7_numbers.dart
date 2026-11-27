@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/aura_fx.dart';
 import '../core/sound/sound.dart';
 import '../core/spring.dart';
 import '../core/springs.dart';
@@ -18,11 +19,16 @@ class BatteryLevelMeter extends StatefulWidget {
 
 class _BatteryLevelMeterState extends State<BatteryLevelMeter> {
   late int _level = widget.initialLevel;
+  int _dir = 1;
+  int _burst = 0;
 
   void _set(int next) {
     final c = next.clamp(0, 100);
+    final reachedFull = c == 100 && _level < 100;
     setState(() {
+      _dir = c >= _level ? 1 : -1;
       _level = c;
+      if (reachedFull) _burst++;
     });
     KipluoSound.play(c == 100 ? KSound.ding : KSound.tick, at: context, volume: 0.45, componentEnabled: widget.sound);
   }
@@ -50,11 +56,18 @@ class _BatteryLevelMeterState extends State<BatteryLevelMeter> {
                   child: Row(
                     children: List.generate(8, (i) {
                       final on = i < lit;
+                      final waveIdx = _dir > 0 ? i : 7 - i;
                       return Expanded(
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 180),
-                          margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                          decoration: BoxDecoration(color: on ? tone : t.track, borderRadius: BorderRadius.circular(4)),
+                        child: AnimatedScale(
+                          scale: on ? 1.0 : 0.78,
+                          duration: Duration(milliseconds: 190 + waveIdx * 18),
+                          curve: Curves.easeOutBack,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 190 + waveIdx * 18),
+                            curve: Curves.easeOutCubic,
+                            margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                            decoration: BoxDecoration(color: on ? tone : t.track, borderRadius: BorderRadius.circular(4)),
+                          ),
                         ),
                       );
                     }),
@@ -63,6 +76,7 @@ class _BatteryLevelMeterState extends State<BatteryLevelMeter> {
                 Container(width: 6, height: 18, decoration: BoxDecoration(color: t.line, borderRadius: const BorderRadius.horizontal(right: Radius.circular(4)))),
               ],
             ),
+            KipluoAuraBurst(burstKey: _burst, size: 80, rays: 8, color: t.ok),
           ],
         ),
         const SizedBox(height: 8),

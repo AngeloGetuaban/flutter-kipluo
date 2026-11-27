@@ -185,7 +185,16 @@ class _HourglassPainter extends CustomPainter {
   final LoaderStatus status;
   final KipluoTokens tokens;
 
-  static const _rays = [-155.0, -135.0, -45.0, -25.0, 25.0, 45.0, 135.0, 155.0];
+  static const _rays = [
+    (deg: -162.0, r0: 36.0, len: 7.5),
+    (deg: -132.0, r0: 47.0, len: 6.5),
+    (deg: -48.0, r0: 47.0, len: 6.5),
+    (deg: -18.0, r0: 36.0, len: 7.5),
+    (deg: 18.0, r0: 36.0, len: 7.5),
+    (deg: 48.0, r0: 47.0, len: 6.5),
+    (deg: 132.0, r0: 47.0, len: 6.5),
+    (deg: 162.0, r0: 36.0, len: 7.5),
+  ];
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -203,28 +212,18 @@ class _HourglassPainter extends CustomPainter {
 
     canvas.drawOval(Rect.fromCenter(center: const Offset(50, 86), width: 46, height: 6), Paint()..color = tokens.track.withValues(alpha: 0.75));
 
-    // Continuous rhythmic side tick release lines while running
-    if (status == LoaderStatus.running) {
-      final tp = math.sin(t * math.pi * 4) * 0.5 + 0.5;
-      final lp = Paint()..color = tokens.accent.withValues(alpha: 0.25 + tp * 0.6)..strokeWidth = 1.5..strokeCap = StrokeCap.round;
-      canvas.drawLine(Offset(21 - tp * 3, 45), Offset(16 - tp * 4, 43), lp);
-      canvas.drawLine(Offset(21 - tp * 3, 55), Offset(16 - tp * 4, 57), lp);
-      canvas.drawLine(Offset(79 + tp * 3, 45), Offset(84 + tp * 4, 43), lp);
-      canvas.drawLine(Offset(79 + tp * 3, 55), Offset(84 + tp * 4, 57), lp);
-    }
-
-    // Radial anime release rays on complete, error, or tap
+    // Radial anime release rays ONLY on complete, error, or interactive shake — with generous clearance from the hourglass body
     if (pulse > 0.02 || isComplete || isError) {
-      final sc = pulse > 0.02 ? 0.85 + (1 - pulse) * 0.35 : 1.0;
+      final sc = pulse > 0.02 ? 0.98 + (1 - pulse) * 0.16 : 1.02;
       final op = pulse > 0.02 ? (pulse * 1.35).clamp(0.0, 1.0) : 0.88;
       canvas.save();
       canvas.translate(50, 50);
       canvas.scale(sc);
-      for (var i = 0; i < _rays.length; i++) {
-        final rad = _rays[i] * math.pi / 180;
-        final r1 = 28.0 + (i.isEven ? 7.5 : 4.5);
+      for (final ray in _rays) {
+        final rad = ray.deg * math.pi / 180;
+        final r1 = ray.r0 + ray.len;
         canvas.drawLine(
-          Offset(math.cos(rad) * 28, math.sin(rad) * 28),
+          Offset(math.cos(rad) * ray.r0, math.sin(rad) * ray.r0),
           Offset(math.cos(rad) * r1, math.sin(rad) * r1),
           Paint()..color = sandColor.withValues(alpha: op)..strokeWidth = 1.8..strokeCap = StrokeCap.round,
         );
@@ -233,7 +232,7 @@ class _HourglassPainter extends CustomPainter {
     }
 
     canvas.save();
-    final rot = pulse > 0.02 ? math.sin(pulse * math.pi * 3) * 0.24 * pulse : (isError ? -0.14 : 0.0);
+    final rot = pulse > 0.02 ? math.sin(pulse * math.pi * 3) * 0.22 * pulse : (isError ? -0.14 : 0.0);
     canvas.translate(50, 50);
     canvas.rotate(rot);
     canvas.translate(-50, -50);

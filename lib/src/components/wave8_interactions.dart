@@ -38,7 +38,13 @@ class _SignaturePadState extends State<SignaturePad> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  CustomPaint(size: const Size(244, 86), painter: _SigPainter(pts: _pts, line: t.line)),
+                  CustomPaint(
+                    size: const Size(244, 86),
+                    painter: _SigPainter(
+                      pts: _pts,
+                      line: Theme.of(context).brightness == Brightness.dark ? Colors.white : t.line,
+                    ),
+                  ),
                   if (_pts.isEmpty) Text('Sign here…', style: TextStyle(fontSize: 11, color: t.line.withValues(alpha: 0.45))),
                 ],
               ),

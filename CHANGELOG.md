@@ -1,3 +1,8 @@
+## 0.3.2
+
+- Subtler `KipluoAuraBurst`: thinner lines and a shorter, quicker animation.
+- Reworked number widgets from waves 4 and 6-8 and refreshed wave 4 loaders.
+
 ## 0.3.1
 
 - Removed the line-release burst from the wave 6-8 charts, controls, interactions, feedback and number widgets. `KnobAngleDial` now fires a small line bump at the needle tip when it settles.

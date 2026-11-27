@@ -25,9 +25,9 @@ void paintReleaseAura(
   if (ring) {
     final ringPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = accent.withValues(alpha: fade * 0.85)
-      ..strokeWidth = (3.2 * (1.0 - eased * 0.7)).clamp(0.8, 3.2);
-    canvas.drawCircle(center, maxRadius * (0.28 + eased * 0.72), ringPaint);
+      ..color = accent.withValues(alpha: fade * 0.8)
+      ..strokeWidth = (2.2 * (1.0 - eased * 0.72)).clamp(0.5, 2.2);
+    canvas.drawCircle(center, maxRadius * (0.34 + eased * 0.46), ringPaint);
   }
   final fan = fanAngle != null;
 
@@ -36,13 +36,16 @@ void paintReleaseAura(
     final angle = fan
         ? fanAngle - fanSpread / 2 + (rays > 1 ? i * fanSpread / (rays - 1) : fanSpread / 2)
         : (i * math.pi * 2) / rays;
-    final inner = maxRadius * (fan ? (0.12 + eased * 0.4) : (0.34 + eased * 0.42));
-    final outer = maxRadius * (i.isEven ? (fan ? 0.4 + eased * 0.32 : 0.58 + eased * 0.42) : (fan ? 0.32 + eased * 0.26 : 0.48 + eased * 0.34));
+    final inner = maxRadius * (fan ? (0.14 + eased * 0.34) : (0.36 + eased * 0.32));
+    final outer = maxRadius *
+        (i.isEven
+            ? (fan ? 0.38 + eased * 0.24 : 0.56 + eased * 0.28)
+            : (fan ? 0.32 + eased * 0.20 : 0.48 + eased * 0.22));
     final p = Paint()
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = i.isEven ? (fan ? 2.6 : 2.4) : (fan ? 1.9 : 1.7)
-      ..color = (i.isEven ? accent : line).withValues(alpha: fade * 0.9);
+      ..strokeWidth = i.isEven ? (fan ? 2.3 : 2.0) : (fan ? 1.6 : 1.35)
+      ..color = (i.isEven ? accent : line).withValues(alpha: fade * 0.88);
     canvas.drawLine(
       center + Offset(math.cos(angle) * inner, math.sin(angle) * inner),
       center + Offset(math.cos(angle) * outer, math.sin(angle) * outer),
