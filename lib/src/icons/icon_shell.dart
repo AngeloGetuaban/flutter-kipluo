@@ -6,7 +6,7 @@ import '../core/theme.dart';
 
 part 'icon_pack.dart';
 
-/// 18 physics and sound motion archetypes matching the web animated icon pack.
+/// 24 physics and sound motion archetypes matching the web animated icon pack.
 enum KIconMotion {
   ring,
   pulse,
@@ -26,6 +26,12 @@ enum KIconMotion {
   pendulum,
   inflate,
   type,
+  heartbeat,
+  tilt3d,
+  float,
+  stamp,
+  cascade,
+  breathe,
 }
 
 enum KIconTier { free, premium }

@@ -36,6 +36,22 @@ abstract class _V3Icon extends StatefulWidget {
 abstract class _V3State<W extends _V3Icon> extends State<W> with SingleTickerProviderStateMixin {
   late final KSprings s = KSprings(vsync: this, initial: initial, config: config);
   final List<Timer> _timers = [];
+  int _hoverIdx = 0;
+  int _streak = 0;
+  DateTime? _lastTriggerAt;
+
+  static const List<double> _hoverSteps = [0.95, 1.06, 1.15, 1.02];
+
+  double nextHoverMul() => _hoverSteps[_hoverIdx++ % _hoverSteps.length];
+
+  double nextComboPitch() {
+    final now = DateTime.now();
+    _streak = (_lastTriggerAt != null && now.difference(_lastTriggerAt!).inMilliseconds < 950)
+        ? (_streak + 1) % 6
+        : 0;
+    _lastTriggerAt = now;
+    return notePitch(_streak);
+  }
 
   Map<String, double> get initial;
   SpringConfig get config => SpringConfig.bouncy;
@@ -157,7 +173,7 @@ class _KUmbrellaPopState extends _V3State<KUmbrellaPopIcon> {
 
   @override
   void onHover() {
-    sfx(KSound.drop, pitch: 1.3, volume: 0.3);
+    sfx(KSound.drop, pitch: 1.24 * nextHoverMul(), volume: 0.32);
     animate({'tilt': -9, 'fx': 70});
   }
 
@@ -166,8 +182,11 @@ class _KUmbrellaPopState extends _V3State<KUmbrellaPopIcon> {
 
   @override
   void onTrigger() {
-    sfx(KSound.whoosh, pitch: 1.2, volume: 0.6);
-    later(90, () => sfx(KSound.pop, pitch: 0.95));
+    final p = nextComboPitch();
+    cancelTimers();
+    sfx(KSound.whoosh, pitch: 1.15 * p, volume: 0.54);
+    later(85, () => sfx(KSound.pop, pitch: 0.96 * p, volume: 0.56));
+    later(155, () => sfx(KSound.splash, pitch: 1.12 * p, volume: 0.38));
     s.set({'open': 18, 'tilt': 0, 'fx': 100});
     animate({'open': 100, 'fx': 0});
   }
@@ -234,7 +253,7 @@ class _KWifiPulseState extends _V3State<KWifiPulseIcon> {
 
   @override
   void onHover() {
-    sfx(KSound.tick, pitch: 1.4, volume: 0.25);
+    sfx(KSound.blip, pitch: 1.28 * nextHoverMul(), volume: 0.28);
     s.set({'a0': 20, 'a1': 20, 'a2': 20});
     animate({'a0': 100, 'a1': 100, 'a2': 100});
   }
@@ -244,18 +263,20 @@ class _KWifiPulseState extends _V3State<KWifiPulseIcon> {
 
   @override
   void onTrigger() {
+    final p = nextComboPitch();
     s.set({'dot': 100, 'a0': 30, 'a1': 30, 'a2': 30});
     animate({'dot': 0});
-    sfx(KSound.pop, pitch: 1.3, volume: 0.5);
+    sfx(KSound.pop, pitch: 1.18 * p, volume: 0.5);
     // Rings light up from the dot outward, one after another.
     cancelTimers();
     for (var i = 0; i < 3; i++) {
       later(i * 90, () {
         animate({'a$i': 160});
-        sfx(KSound.tick, pitch: 1 + i * 0.25, volume: 0.4);
+        sfx(KSound.blip, pitch: (0.95 + i * 0.22) * p, volume: 0.42);
         later(160, () => animate({'a$i': 100}));
       });
     }
+    later(270, () => sfx(KSound.space, pitch: 1.2 * p, volume: 0.34));
   }
 
   @override
@@ -300,7 +321,7 @@ class _KRainCloudState extends _V3State<KRainCloudIcon> {
 
   @override
   void onHover() {
-    sfx(KSound.whoosh, volume: 0.3);
+    sfx(KSound.whoosh, pitch: 1.05 * nextHoverMul(), volume: 0.3);
     animate({'puff': 60, 'x': 1.5});
   }
 
@@ -309,9 +330,12 @@ class _KRainCloudState extends _V3State<KRainCloudIcon> {
 
   @override
   void onTrigger() {
-    const pitches = [1.1, 1.35, 1.2];
+    final p = nextComboPitch();
+    cancelTimers();
+    sfx(KSound.pour, pitch: 1.05 * p, volume: 0.36);
+    const pitches = [1.08, 1.32, 1.18];
     for (var i = 0; i < 3; i++) {
-      later(80 + i * 110, () => sfx(KSound.drop, pitch: pitches[i], volume: 0.5));
+      later(75 + i * 100, () => sfx(i == 1 ? KSound.splash : KSound.drop, pitch: pitches[i] * p, volume: 0.46));
     }
     s.set({'puff': -80, 'rain': 0});
     animate({'puff': 0, 'rain': 100});
@@ -364,7 +388,7 @@ class _KDropPinState extends _V3State<KDropPinIcon> {
 
   @override
   void onHover() {
-    sfx(KSound.boop, pitch: 1.3, volume: 0.3);
+    sfx(KSound.boop, pitch: 1.24 * nextHoverMul(), volume: 0.32);
     animate({'y': -4});
   }
 
@@ -373,9 +397,11 @@ class _KDropPinState extends _V3State<KDropPinIcon> {
 
   @override
   void onTrigger() {
+    final p = nextComboPitch();
     cancelTimers();
-    sfx(KSound.whoosh, pitch: 1.4, volume: 0.4);
-    later(170, () => sfx(KSound.drop, pitch: 0.9));
+    sfx(KSound.whoosh, pitch: 1.32 * p, volume: 0.42);
+    later(155, () => sfx(KSound.clack, pitch: 0.96 * p, volume: 0.5));
+    later(195, () => sfx(KSound.drop, pitch: 1.1 * p, volume: 0.46));
     s.set({'y': -16, 'ring': 0});
     animate({'y': 0});
     later(150, () {

@@ -37,6 +37,9 @@ class KipluoSound {
 
   static final Map<String, DateTime> _last = {};
 
+  /// Clears the burst-throttle history (useful in widget tests running in fake async time).
+  static void resetThrottle() => _last.clear();
+
   /// Plays [name] from the horizontal position of [at] (its centre), optionally travelling.
   static void play(
     KSound name, {
@@ -60,6 +63,21 @@ class KipluoSound {
           KSound.click: 28,
           KSound.ding: 45,
           KSound.meow: 80,
+          KSound.jump: 140,
+          KSound.giggle: 180,
+          KSound.aww: 180,
+          KSound.pour: 105,
+          KSound.clack: 90,
+          KSound.squish: 120,
+          KSound.thrust: 140,
+          KSound.zap: 95,
+          KSound.crackle: 120,
+          KSound.sand: 130,
+          KSound.bubble: 110,
+          KSound.blip: 45,
+          KSound.vinyl: 140,
+          KSound.space: 150,
+          KSound.splash: 160,
         }[name] ??
         20;
     if (now.difference(_last[key] ?? DateTime(2000)).inMilliseconds < gap) return;

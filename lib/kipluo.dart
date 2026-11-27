@@ -3,6 +3,7 @@
 library;
 
 // Core engine
+export 'src/core/aura_fx.dart';
 export 'src/core/sound/sound.dart';
 export 'src/core/spring.dart';
 export 'src/core/springs.dart';
@@ -62,15 +63,40 @@ export 'src/components/wave5_controls.dart';
 export 'src/components/wave5_feedback.dart';
 export 'src/components/wave5_interactions.dart';
 
+// Wave 6 (Interactions, Controls, Charts, Numbers, Feedback)
+export 'src/components/wave6_charts.dart';
+export 'src/components/wave6_controls.dart';
+export 'src/components/wave6_feedback.dart';
+export 'src/components/wave6_interactions.dart';
+export 'src/components/wave6_numbers.dart';
+
+// Wave 7 (Interactions, Controls, Charts, Numbers, Feedback)
+export 'src/components/wave7_charts.dart';
+export 'src/components/wave7_controls.dart';
+export 'src/components/wave7_feedback.dart';
+export 'src/components/wave7_interactions.dart';
+export 'src/components/wave7_numbers.dart';
+
+// Wave 8 (Interactions, Controls, Charts, Numbers, Feedback)
+export 'src/components/wave8_charts.dart';
+export 'src/components/wave8_controls.dart';
+export 'src/components/wave8_feedback.dart';
+export 'src/components/wave8_interactions.dart';
+export 'src/components/wave8_numbers.dart';
+
 // Textured Loaders (16 total)
 export 'src/loaders/loader_base.dart';
 export 'src/loaders/paper_plane_loader.dart';
 export 'src/loaders/pixel_progress_loader.dart';
 export 'src/loaders/typing_indicator.dart';
 export 'src/loaders/wave4_loaders.dart';
+export 'src/loaders/wave7_loaders.dart';
+export 'src/loaders/wave8_loaders.dart';
 export 'src/loaders/worm_loader.dart';
 
-// Animated Icons (44 bespoke + 1,000 curated pack = 1,044 total)
+// Animated Icons (100 bespoke + 2,000 curated pack = 2,100 total)
 export 'src/icons/animated_icon.dart';
 export 'src/icons/bespoke_icons.dart';
 export 'src/icons/icon_shell.dart';
+export 'src/icons/vector_glyph.dart';
+export 'src/icons/vector_glyph_data.dart';

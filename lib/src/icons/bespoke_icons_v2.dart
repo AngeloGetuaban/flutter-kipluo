@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -40,6 +41,12 @@ class _BespokeV2Icon extends StatefulWidget {
     required this.defaultLabel,
     required this.hoverSound,
     required this.clickSound,
+    this.followSound,
+    this.followMs = 85,
+    this.followPitch = 1.18,
+    this.thirdSound,
+    this.thirdMs = 160,
+    this.thirdPitch = 1.24,
     required this.painterFn,
     this.onPressed,
     this.sound = true,
@@ -50,6 +57,12 @@ class _BespokeV2Icon extends StatefulWidget {
   final String defaultLabel;
   final KSound hoverSound;
   final KSound clickSound;
+  final KSound? followSound;
+  final int followMs;
+  final double followPitch;
+  final KSound? thirdSound;
+  final int thirdMs;
+  final double thirdPitch;
   final void Function(Canvas c, Size s, double rot, double scale, double fx, KipluoTokens t) painterFn;
   final VoidCallback? onPressed;
   final bool sound;
@@ -60,9 +73,33 @@ class _BespokeV2Icon extends StatefulWidget {
 
 class _BespokeV2IconState extends State<_BespokeV2Icon> with SingleTickerProviderStateMixin {
   late final KSprings _s = KSprings(vsync: this, initial: {'rot': 0, 'scale': 100, 'fx': 0}, config: SpringConfig.bouncy);
+  int _hoverIdx = 0;
+  int _streak = 0;
+  DateTime? _lastTapAt;
+  final List<Timer> _timers = [];
+
+  static const List<double> _hoverSteps = [0.95, 1.06, 1.15, 1.02];
+
+  void _cancelTimers() {
+    for (final t in _timers) {
+      t.cancel();
+    }
+    _timers.clear();
+  }
+
+  void _later(int ms, VoidCallback fn) {
+    if (!widget.sound || !KipluoSound.enabled.value) return;
+    late final Timer timer;
+    timer = Timer(Duration(milliseconds: ms), () {
+      _timers.remove(timer);
+      if (mounted) fn();
+    });
+    _timers.add(timer);
+  }
 
   @override
   void dispose() {
+    _cancelTimers();
     _s.dispose();
     super.dispose();
   }
@@ -70,7 +107,8 @@ class _BespokeV2IconState extends State<_BespokeV2Icon> with SingleTickerProvide
   void _hover() {
     _s.reducedMotion = kipluoReducedMotion(context);
     _s.animateTo({'rot': -100, 'scale': 108});
-    KipluoSound.play(widget.hoverSound, at: context, volume: 0.28, componentEnabled: widget.sound);
+    final step = _hoverSteps[_hoverIdx++ % _hoverSteps.length];
+    KipluoSound.play(widget.hoverSound, at: context, pitch: (1.08 * step).clamp(0.5, 2.2), volume: 0.3, componentEnabled: widget.sound);
   }
 
   void _exit() {
@@ -80,9 +118,26 @@ class _BespokeV2IconState extends State<_BespokeV2Icon> with SingleTickerProvide
 
   void _tap() {
     _s.reducedMotion = kipluoReducedMotion(context);
+    _cancelTimers();
+    final now = DateTime.now();
+    _streak = (_lastTapAt != null && now.difference(_lastTapAt!).inMilliseconds < 950)
+        ? (_streak + 1) % 6
+        : 0;
+    _lastTapAt = now;
+    final combo = notePitch(_streak);
     _s.set({'fx': 100, 'scale': 84, 'rot': 160});
     _s.animateTo({'fx': 0, 'scale': 100, 'rot': 0});
-    KipluoSound.play(widget.clickSound, at: context, volume: 0.72, componentEnabled: widget.sound);
+    KipluoSound.play(widget.clickSound, at: context, pitch: combo.clamp(0.5, 2.2), volume: 0.64, componentEnabled: widget.sound);
+    if (widget.followSound != null) {
+      _later(widget.followMs, () {
+        KipluoSound.play(widget.followSound!, at: context, pitch: (widget.followPitch * combo).clamp(0.5, 2.2), volume: 0.46, componentEnabled: widget.sound);
+      });
+    }
+    if (widget.thirdSound != null) {
+      _later(widget.thirdMs, () {
+        KipluoSound.play(widget.thirdSound!, at: context, pitch: (widget.thirdPitch * combo).clamp(0.5, 2.2), volume: 0.38, componentEnabled: widget.sound);
+      });
+    }
     widget.onPressed?.call();
   }
 
@@ -149,6 +204,12 @@ class KHomeIcon extends _BespokeV2Icon {
           defaultLabel: 'Home Icon',
           hoverSound: KSound.boop,
           clickSound: KSound.pop,
+          followSound: KSound.whoosh,
+          followMs: 65,
+          followPitch: 1.25,
+          thirdSound: KSound.bell,
+          thirdMs: 140,
+          thirdPitch: 1.08,
           painterFn: (c, sz, _, _, _, t) {
             final w = sz.width * 0.34;
             c.drawRect(Rect.fromLTWH(-w * 0.65, -w * 0.1, w * 1.3, w * 0.9), Paint()..color = t.surface);
@@ -164,7 +225,13 @@ class KFolderIcon extends _BespokeV2Icon {
       : super(
           defaultLabel: 'Folder Icon',
           hoverSound: KSound.flip,
-          clickSound: KSound.pop,
+          clickSound: KSound.flip,
+          followSound: KSound.swipe,
+          followMs: 70,
+          followPitch: 1.15,
+          thirdSound: KSound.pop,
+          thirdMs: 140,
+          thirdPitch: 1.12,
           painterFn: (c, sz, _, _, _, t) {
             final w = sz.width * 0.36;
             c.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(-w, -w * 0.6, w * 2, w * 1.3), const Radius.circular(4)), Paint()..color = t.accent);
@@ -178,7 +245,10 @@ class KCalendarIcon extends _BespokeV2Icon {
       : super(
           defaultLabel: 'Calendar Icon',
           hoverSound: KSound.flip,
-          clickSound: KSound.click,
+          clickSound: KSound.flip,
+          followSound: KSound.click,
+          followMs: 65,
+          followPitch: 1.14,
           painterFn: (c, sz, _, _, _, t) {
             final w = sz.width * 0.34;
             c.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(-w, -w * 0.7, w * 2, w * 1.5), const Radius.circular(4)), Paint()..color = t.surface);
@@ -194,7 +264,13 @@ class KClockIcon extends _BespokeV2Icon {
       : super(
           defaultLabel: 'Clock Icon',
           hoverSound: KSound.tick,
-          clickSound: KSound.ding,
+          clickSound: KSound.tick,
+          followSound: KSound.tick,
+          followMs: 65,
+          followPitch: 1.18,
+          thirdSound: KSound.bell,
+          thirdMs: 145,
+          thirdPitch: 1.08,
           painterFn: (c, sz, _, _, _, t) {
             final r = sz.width * 0.36;
             c.drawCircle(Offset.zero, r, Paint()..color = t.accent);
@@ -208,8 +284,11 @@ class KEyeIcon extends _BespokeV2Icon {
   KEyeIcon({super.key, super.size, super.label, super.onPressed, super.sound})
       : super(
           defaultLabel: 'Eye Icon',
-          hoverSound: KSound.tick,
+          hoverSound: KSound.whoosh,
           clickSound: KSound.click,
+          followSound: KSound.pop,
+          followMs: 95,
+          followPitch: 1.24,
           painterFn: (c, sz, _, _, _, t) {
             final w = sz.width * 0.38;
             final p = Path()..moveTo(-w, 0)..quadraticBezierTo(0, -w * 0.7, w, 0)..quadraticBezierTo(0, w * 0.7, -w, 0);
@@ -226,7 +305,10 @@ class KThumbsUpIcon extends _BespokeV2Icon {
       : super(
           defaultLabel: 'Thumbs Up Icon',
           hoverSound: KSound.boop,
-          clickSound: KSound.pop,
+          clickSound: KSound.jump,
+          followSound: KSound.sparkle,
+          followMs: 85,
+          followPitch: 1.15,
           painterFn: (c, sz, _, _, _, t) {
             final w = sz.width * 0.32;
             c.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(-w * 0.9, -w * 0.1, w * 0.45, w * 0.95), const Radius.circular(3)), Paint()..color = t.surface);
@@ -242,6 +324,12 @@ class KRefreshIcon extends _BespokeV2Icon {
           defaultLabel: 'Refresh Icon',
           hoverSound: KSound.tick,
           clickSound: KSound.whoosh,
+          followSound: KSound.click,
+          followMs: 140,
+          followPitch: 1.18,
+          thirdSound: KSound.ding,
+          thirdMs: 205,
+          thirdPitch: 1.16,
           painterFn: (c, sz, _, _, _, t) {
             final r = sz.width * 0.32;
             c.drawArc(Rect.fromCircle(center: Offset.zero, radius: r), -0.4, math.pi * 1.55, false, Paint()..color = t.line..style = PaintingStyle.stroke..strokeWidth = 2.6..strokeCap = StrokeCap.round);
@@ -254,7 +342,10 @@ class KUploadIcon extends _BespokeV2Icon {
       : super(
           defaultLabel: 'Upload Icon',
           hoverSound: KSound.whoosh,
-          clickSound: KSound.swish,
+          clickSound: KSound.thrust,
+          followSound: KSound.ding,
+          followMs: 130,
+          followPitch: 1.2,
           painterFn: (c, sz, _, _, _, t) {
             final w = sz.width * 0.3;
             c.drawLine(Offset(0, w * 0.3), Offset(0, -w * 0.9), Paint()..color = t.line..strokeWidth = 2.5..strokeCap = StrokeCap.round);

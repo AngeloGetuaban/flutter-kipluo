@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import '../core/springs.dart';
 import '../core/theme.dart';
 import 'bespoke_icons_v2.dart';
 import 'bespoke_icons_v3.dart';
+import 'bespoke_icons_v4.dart';
 import 'icon_shell.dart';
 
 export 'bespoke_icons_v2.dart'
@@ -16,8 +18,9 @@ export 'bespoke_icons_v2.dart'
 export 'bespoke_icons_v3.dart'
     show
         KUmbrellaPopIcon, KWifiPulseIcon, KRainCloudIcon, KDropPinIcon, kipluoBespokeV3Icons;
+export 'bespoke_icons_v4.dart';
 
-/// Metadata for all 44 bespoke multi-part animated icons (16 v1 + 20 v2 + 8 v3).
+/// Metadata for all 100 bespoke multi-part animated icons (16 v1 + 20 v2 + 8 v3 + 56 v4).
 const List<({String slug, String title, KIconTier tier})> kipluoBespokeIcons = [
   (slug: 'bell-icon', title: 'Bell Icon', tier: KIconTier.free),
   (slug: 'heart-icon', title: 'Heart Icon', tier: KIconTier.free),
@@ -37,6 +40,7 @@ const List<({String slug, String title, KIconTier tier})> kipluoBespokeIcons = [
   (slug: 'paw-icon', title: 'Cat Paw Icon', tier: KIconTier.premium),
   ...kipluoBespokeV2Icons,
   ...kipluoBespokeV3Icons,
+  ...kipluoBespokeV4Icons,
 ];
 
 abstract class _BaseBespokeIcon extends StatefulWidget {
@@ -54,9 +58,42 @@ class _BespokeState<_W extends _BaseBespokeIcon> extends State<_W> with SingleTi
     config: SpringConfig.bouncy,
   );
   bool toggled = false;
+  int _hoverIdx = 0;
+  int _streak = 0;
+  DateTime? _lastClickAt;
+  final List<Timer> _timers = [];
+
+  static const List<double> _hoverSteps = [0.95, 1.06, 1.15, 1.02];
+
+  void cancelTimers() {
+    for (final t in _timers) {
+      t.cancel();
+    }
+    _timers.clear();
+  }
+
+  void later(int ms, VoidCallback fn) {
+    if (!widget.sound || !KipluoSound.enabled.value) return;
+    late final Timer timer;
+    timer = Timer(Duration(milliseconds: ms), () {
+      _timers.remove(timer);
+      if (mounted) fn();
+    });
+    _timers.add(timer);
+  }
+
+  double nextComboPitch() {
+    final now = DateTime.now();
+    _streak = (_lastClickAt != null && now.difference(_lastClickAt!).inMilliseconds < 950)
+        ? (_streak + 1) % 6
+        : 0;
+    _lastClickAt = now;
+    return notePitch(_streak);
+  }
 
   @override
   void dispose() {
+    cancelTimers();
     s.dispose();
     super.dispose();
   }
@@ -64,7 +101,8 @@ class _BespokeState<_W extends _BaseBespokeIcon> extends State<_W> with SingleTi
   void hover(KSound soundName, {double pitch = 1, double volume = 0.3, double rot = 6, double scale = 108, double y = -1.5}) {
     s.reducedMotion = kipluoReducedMotion(context);
     s.animateTo({'rot': rot * 10, 'scale': scale, 'y': y});
-    KipluoSound.play(soundName, at: context, pitch: pitch, volume: volume, componentEnabled: widget.sound);
+    final step = _hoverSteps[_hoverIdx++ % _hoverSteps.length];
+    KipluoSound.play(soundName, at: context, pitch: (pitch * step).clamp(0.5, 2.2), volume: volume, componentEnabled: widget.sound);
   }
 
   void exit() {
@@ -72,12 +110,40 @@ class _BespokeState<_W extends _BaseBespokeIcon> extends State<_W> with SingleTi
     s.animateTo({'rot': 0, 'scale': 100, 'x': 0, 'y': 0});
   }
 
-  void triggerFx(KSound clickSound, {double pitch = 1, double rot = 0, double scale = 100, double x = 0, double y = 0, bool flipToggle = false}) {
+  void triggerFx(
+    KSound clickSound, {
+    double pitch = 1,
+    KSound? followSound,
+    int followMs = 85,
+    double followPitch = 1.16,
+    double followVolume = 0.45,
+    KSound? thirdSound,
+    int thirdMs = 165,
+    double thirdPitch = 1.24,
+    double thirdVolume = 0.38,
+    double rot = 0,
+    double scale = 100,
+    double x = 0,
+    double y = 0,
+    bool flipToggle = false,
+  }) {
     s.reducedMotion = kipluoReducedMotion(context);
+    cancelTimers();
     if (flipToggle) toggled = !toggled;
+    final combo = nextComboPitch();
     s.set({'fx': 100, 'scale': 86, 'rot': rot * 10, 'x': x, 'y': y});
     s.animateTo({'fx': 0, 'scale': scale, 'rot': 0, 'x': 0, 'y': 0, 'state': toggled ? 100 : 0});
-    KipluoSound.play(clickSound, at: context, pitch: pitch, volume: 0.72, componentEnabled: widget.sound);
+    KipluoSound.play(clickSound, at: context, pitch: (pitch * combo).clamp(0.5, 2.2), volume: 0.65, componentEnabled: widget.sound);
+    if (followSound != null) {
+      later(followMs, () {
+        KipluoSound.play(followSound, at: context, pitch: (followPitch * combo).clamp(0.5, 2.2), volume: followVolume, componentEnabled: widget.sound);
+      });
+    }
+    if (thirdSound != null) {
+      later(thirdMs, () {
+        KipluoSound.play(thirdSound, at: context, pitch: (thirdPitch * combo).clamp(0.5, 2.2), volume: thirdVolume, componentEnabled: widget.sound);
+      });
+    }
     widget.onPressed?.call();
   }
 
@@ -119,9 +185,9 @@ class _KBellState extends _BespokeState<KBellIcon> {
   @override
   String get defaultLabel => 'Bell';
   @override
-  void onHoverSound() => hover(KSound.tick, volume: 0.28, rot: 12);
+  void onHoverSound() => hover(KSound.clack, pitch: 1.15, volume: 0.28, rot: 12);
   @override
-  void onClickAction() => triggerFx(KSound.bell, rot: -20);
+  void onClickAction() => triggerFx(KSound.bell, followSound: KSound.bell, followMs: 120, followPitch: 1.18, followVolume: 0.38, rot: -20);
   @override
   CustomPainter painterBuilder(KSprings s, bool toggled, KipluoTokens t) => _BellPainter(rot: s['rot'] / 10, fx: s['fx'] / 100, scale: s['scale'] / 100, t: t);
 }
@@ -172,7 +238,9 @@ class _KHeartState extends _BespokeState<KHeartIcon> {
   @override
   void onHoverSound() => hover(KSound.boop, pitch: 1.15, volume: 0.28, rot: 0, scale: 112);
   @override
-  void onClickAction() => triggerFx(toggled ? KSound.boopLow : KSound.pop, flipToggle: true);
+  void onClickAction() => toggled
+      ? triggerFx(KSound.aww, pitch: 1.05, flipToggle: true)
+      : triggerFx(KSound.boopLow, pitch: 0.96, followSound: KSound.pop, followMs: 85, followPitch: 1.18, thirdSound: KSound.sparkle, thirdMs: 155, thirdPitch: 1.24, flipToggle: true);
   @override
   CustomPainter painterBuilder(KSprings s, bool toggled, KipluoTokens t) => _KHeartPainter(fill: s['state'] / 100, fx: s['fx'] / 100, scale: s['scale'] / 100, t: t);
 }
@@ -224,7 +292,7 @@ class _KStarState extends _BespokeState<KStarIcon> {
   @override
   void onHoverSound() => hover(KSound.tick, pitch: 1.2, volume: 0.25, rot: 14, scale: 108);
   @override
-  void onClickAction() => triggerFx(KSound.ding, rot: 180, scale: 112);
+  void onClickAction() => triggerFx(KSound.ding, followSound: KSound.sparkle, followMs: 95, followPitch: 1.22, rot: 180, scale: 112);
   @override
   CustomPainter painterBuilder(KSprings s, bool toggled, KipluoTokens t) => _KStarPainter(rot: s['rot'] / 10, fx: s['fx'] / 100, scale: s['scale'] / 100, t: t);
 }
@@ -276,9 +344,9 @@ class _KTrashState extends _BespokeState<KTrashIcon> {
   @override
   String get defaultLabel => 'Trash';
   @override
-  void onHoverSound() => hover(KSound.boop, volume: 0.25, rot: -10, scale: 105);
+  void onHoverSound() => hover(KSound.flip, volume: 0.28, rot: -10, scale: 105);
   @override
-  void onClickAction() => triggerFx(KSound.pop, rot: -26);
+  void onClickAction() => triggerFx(KSound.flip, followSound: KSound.drop, followMs: 80, followPitch: 0.95, thirdSound: KSound.clack, thirdMs: 165, thirdPitch: 0.88, rot: -26);
   @override
   CustomPainter painterBuilder(KSprings s, bool toggled, KipluoTokens t) => _SimpleBespokePainter(t: t, rot: s['rot'] / 10, scale: s['scale'] / 100, fx: s['fx'] / 100, drawFn: (c, sz) {
     final w = sz.width;
@@ -303,9 +371,9 @@ class _KSearchState extends _BespokeState<KSearchIcon> {
   @override
   String get defaultLabel => 'Search';
   @override
-  void onHoverSound() => hover(KSound.whoosh, volume: 0.25, rot: -8, scale: 108);
+  void onHoverSound() => hover(KSound.whoosh, volume: 0.26, rot: -8, scale: 108);
   @override
-  void onClickAction() => triggerFx(KSound.click, rot: 14, scale: 112);
+  void onClickAction() => triggerFx(KSound.click, followSound: KSound.ding, followMs: 95, followPitch: 1.24, rot: 14, scale: 112);
   @override
   CustomPainter painterBuilder(KSprings s, bool toggled, KipluoTokens t) => _SimpleBespokePainter(t: t, rot: s['rot'] / 10, scale: s['scale'] / 100, fx: s['fx'] / 100, drawFn: (c, sz) {
     final r = sz.width * 0.22;
@@ -326,9 +394,9 @@ class _KGearState extends _BespokeState<KGearIcon> {
   @override
   String get defaultLabel => 'Settings';
   @override
-  void onHoverSound() => hover(KSound.tick, volume: 0.25, rot: 45, scale: 105);
+  void onHoverSound() => hover(KSound.clack, pitch: 1.15, volume: 0.26, rot: 45, scale: 105);
   @override
-  void onClickAction() => triggerFx(KSound.tick, pitch: 1.25, rot: 180);
+  void onClickAction() => triggerFx(KSound.clack, pitch: 0.96, followSound: KSound.clack, followMs: 65, followPitch: 1.12, thirdSound: KSound.clack, thirdMs: 130, thirdPitch: 1.28, rot: 180);
   @override
   CustomPainter painterBuilder(KSprings s, bool toggled, KipluoTokens t) => _SimpleBespokePainter(t: t, rot: s['rot'] / 10, scale: s['scale'] / 100, fx: s['fx'] / 100, drawFn: (c, sz) {
     final r = sz.width * 0.26;

@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 /// The Kipluo sound palette, same names as the web engine (apps/web/src/lib/sound.ts).
-enum KSound { boop, boopLow, pop, drop, swish, swipe, chime, bonk, tick, boing, whoosh, sparkle, flip, bell, click, ding, meow }
+enum KSound { boop, boopLow, pop, drop, swish, swipe, chime, bonk, tick, boing, whoosh, sparkle, flip, bell, click, ding, meow, jump, giggle, aww, pour, clack, squish, thrust, zap, crackle, sand, bubble, blip, vinyl, space, splash }
 
 const int kSampleRate = 44100;
 
@@ -65,6 +65,78 @@ Float32List renderSound(KSound name, double pitch) {
       r.tone(f0: 620 * p, f1: 1080 * p, attack: 0.012, decay: 0.09, peak: 0.32, glide: 0.075);
       r.tone(f0: 1040 * p, f1: 760 * p, start: 0.075, attack: 0.008, decay: 0.14, peak: 0.28, glide: 0.12);
       r.tone(wave: _Wave.triangle, f0: 1860 * p, f1: 1520 * p, start: 0.02, decay: 0.12, peak: 0.06);
+    case KSound.jump:
+      // Bouncy cartoon hop ("bwoip!"): soft squash thump + joyful upward pitch glide.
+      r.tone(f0: 250 * p, f1: 720 * p, attack: 0.004, decay: 0.15, peak: 0.5, glide: 0.11);
+      r.tone(wave: _Wave.triangle, f0: 500 * p, f1: 1440 * p, attack: 0.004, decay: 0.1, peak: 0.15, glide: 0.09);
+    case KSound.giggle:
+      // Cute baby giggle ("hee-hee-hee!"): four rapid bubbly rising lilting chirps.
+      const notes = [
+        (f0: 820.0, f1: 1140.0, start: 0.0),
+        (f0: 900.0, f1: 1280.0, start: 0.075),
+        (f0: 980.0, f1: 1440.0, start: 0.15),
+        (f0: 1120.0, f1: 1580.0, start: 0.23),
+      ];
+      for (var i = 0; i < notes.length; i++) {
+        final n = notes[i];
+        final dec = i == 3 ? 0.14 : 0.068;
+        r.tone(f0: n.f0 * p, f1: n.f1 * p, start: n.start, attack: 0.008, decay: dec, peak: i == 3 ? 0.36 : 0.32, glide: 0.048);
+        r.tone(wave: _Wave.triangle, f0: n.f0 * 1.98 * p, f1: n.f1 * 1.98 * p, start: n.start + 0.004, attack: 0.006, decay: dec * 0.75, peak: 0.09, glide: 0.044);
+      }
+    case KSound.aww:
+      // Cute sad baby whimper ("awww-wah..."): two gentle descending sighs with soft quiver.
+      r.tone(f0: 760 * p, f1: 470 * p, start: 0.0, attack: 0.018, decay: 0.19, peak: 0.38, glide: 0.17, vibratoHz: 7.5, vibratoDepth: 16 * p);
+      r.tone(wave: _Wave.triangle, f0: 1520 * p, f1: 940 * p, start: 0.005, attack: 0.014, decay: 0.14, peak: 0.08, glide: 0.15);
+      r.tone(f0: 540 * p, f1: 310 * p, start: 0.16, attack: 0.02, decay: 0.28, peak: 0.4, glide: 0.25, vibratoHz: 7.5, vibratoDepth: 16 * p);
+      r.tone(wave: _Wave.triangle, f0: 1080 * p, f1: 620 * p, start: 0.165, attack: 0.016, decay: 0.22, peak: 0.08, glide: 0.22);
+    case KSound.pour:
+      // Flowing water & fast sparkling drops: silky liquid rush + 3 rapid rising bubble plips.
+      r.noise(type: _Filter.bandpass, f0: 760 * p, f1: 1950 * p, attack: 0.015, decay: 0.16, peak: 0.22, q: 2.4);
+      r.tone(f0: 460 * p, f1: 1240 * p, start: 0.0, attack: 0.002, decay: 0.055, peak: 0.34, glide: 0.036);
+      r.tone(f0: 610 * p, f1: 1520 * p, start: 0.048, attack: 0.002, decay: 0.052, peak: 0.3, glide: 0.034);
+      r.tone(f0: 780 * p, f1: 1860 * p, start: 0.095, attack: 0.002, decay: 0.058, peak: 0.28, glide: 0.036);
+    case KSound.clack:
+      // Aluminum/metal sphere collision ("tink-clack!"): sharp contact snap + inharmonic metallic ring.
+      r.noise(type: _Filter.bandpass, f0: 3200 * p, f1: 6400 * p, attack: 0.001, decay: 0.018, peak: 0.36, q: 2.6);
+      r.tone(f0: 980 * p, f1: 740 * p, attack: 0.001, decay: 0.026, peak: 0.28, glide: 0.018);
+      r.tone(f0: 2480 * p, attack: 0.001, decay: 0.145, peak: 0.38);
+      r.tone(f0: 3920 * p, attack: 0.001, decay: 0.095, peak: 0.22);
+      r.tone(wave: _Wave.triangle, f0: 5720 * p, attack: 0.001, decay: 0.055, peak: 0.1);
+    case KSound.squish:
+      r.tone(f0: 210 * p, f1: 540 * p, attack: 0.008, decay: 0.085, peak: 0.42, glide: 0.055);
+      r.tone(f0: 520 * p, f1: 270 * p, start: 0.055, attack: 0.006, decay: 0.09, peak: 0.3, glide: 0.07);
+      r.noise(type: _Filter.bandpass, f0: 650 * p, f1: 1400 * p, attack: 0.01, decay: 0.08, peak: 0.16, q: 2.2);
+    case KSound.thrust:
+      r.noise(type: _Filter.lowpass, f0: 190 * p, f1: 720 * p, attack: 0.025, decay: 0.18, peak: 0.42, q: 0.7);
+      r.tone(wave: _Wave.triangle, f0: 96 * p, f1: 148 * p, attack: 0.015, decay: 0.18, peak: 0.28, glide: 0.14);
+    case KSound.zap:
+      r.noise(type: _Filter.highpass, f0: 2600 * p, f1: 5200 * p, attack: 0.002, decay: 0.06, peak: 0.3, q: 1.5);
+      r.tone(wave: _Wave.triangle, f0: 1480 * p, f1: 3100 * p, attack: 0.002, decay: 0.045, peak: 0.18, glide: 0.03);
+      r.tone(wave: _Wave.triangle, f0: 2200 * p, f1: 880 * p, start: 0.03, attack: 0.002, decay: 0.075, peak: 0.26, glide: 0.06);
+    case KSound.crackle:
+      r.noise(type: _Filter.bandpass, f0: 1900 * p, f1: 4200 * p, attack: 0.002, decay: 0.035, peak: 0.34, q: 2.4);
+      r.tone(f0: 170 * p, f1: 110 * p, attack: 0.004, decay: 0.065, peak: 0.24, glide: 0.05);
+      r.tone(wave: _Wave.triangle, f0: 2800 * p, f1: 1600 * p, start: 0.028, attack: 0.001, decay: 0.024, peak: 0.18, glide: 0.018);
+    case KSound.sand:
+      r.noise(type: _Filter.bandpass, f0: 3200 * p, f1: 5400 * p, attack: 0.012, decay: 0.12, peak: 0.2, q: 2.8);
+      r.tone(f0: 2150 * p, f1: 1850 * p, start: 0.02, attack: 0.001, decay: 0.022, peak: 0.1, glide: 0.016);
+    case KSound.bubble:
+      r.tone(f0: 340 * p, f1: 960 * p, attack: 0.004, decay: 0.085, peak: 0.44, glide: 0.058);
+      r.tone(f0: 620 * p, f1: 1380 * p, start: 0.052, attack: 0.003, decay: 0.055, peak: 0.22, glide: 0.038);
+    case KSound.blip:
+      r.tone(wave: _Wave.triangle, f0: 587 * p, attack: 0.002, decay: 0.065, peak: 0.22);
+      r.tone(wave: _Wave.triangle, f0: 1174 * p, attack: 0.002, decay: 0.055, peak: 0.18);
+    case KSound.vinyl:
+      r.noise(type: _Filter.bandpass, f0: 3400 * p, f1: 1700 * p, attack: 0.001, decay: 0.024, peak: 0.24, q: 2.2);
+      r.tone(f0: 220 * p, f1: 232 * p, attack: 0.015, decay: 0.15, peak: 0.18, glide: 0.12);
+      r.tone(wave: _Wave.triangle, f0: 440 * p, start: 0.01, attack: 0.015, decay: 0.12, peak: 0.07);
+    case KSound.space:
+      r.tone(f0: 784 * p, f1: 830 * p, attack: 0.014, decay: 0.24, peak: 0.26, glide: 0.18);
+      r.tone(wave: _Wave.triangle, f0: 1176 * p, start: 0.02, attack: 0.014, decay: 0.22, peak: 0.12);
+    case KSound.splash:
+      r.noise(type: _Filter.bandpass, f0: 920 * p, f1: 3500 * p, attack: 0.012, decay: 0.22, peak: 0.36, q: 1.3);
+      r.tone(f0: 520 * p, f1: 1480 * p, start: 0.015, attack: 0.003, decay: 0.08, peak: 0.32, glide: 0.05);
+      r.tone(f0: 760 * p, f1: 1920 * p, start: 0.068, attack: 0.003, decay: 0.07, peak: 0.24, glide: 0.045);
   }
   return r.finish();
 }

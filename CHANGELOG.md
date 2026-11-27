@@ -1,3 +1,11 @@
+## 0.3.0
+
+- 21 new free widgets and loaders: `SpringDrawerHandle`, `SpringSplitPane`, `SpringDateStrip`, `SpringMultiSelect`, `SpringAreaSpark`, `MilestoneOdometer`, `InlineConfirmPill`, `SpotlightBentoCard`, `SpringCombobox`, `TactileRadioCards`, `StackedBarChart`, `BatteryLevelMeter`, `BannerAnnouncement`, `PendulumCradleLoader`, `SignaturePad`, `SpringColorSwatches`, `PillFilterBar`, `WaterfallDeltaChart`, `CountdownBlocks`, `StepChecklistCard` and `VinylSpinLoader`.
+- The free icon pack grows to 638 live icons, including new multi-part bespoke icons.
+- New synthesized sounds: jump, giggle, aww, pour, clack, squish, thrust, zap, crackle, sand, bubble, blip, vinyl, space and splash.
+- `KipluoAuraBurst` can draw lines only (`ring: false`) and fan its rays over an arc (`fanAngle`, `fanSpread`).
+- Premium additions (install with `npx kipluo add <name> --flutter`): 27 widgets and loaders including Knob Angle Dial, Spring Treemap, Speedometer Arc, Bezier Curve Editor, Waveform Trimmer, Scatter Spring Plot, Activity Rings, Dual Radar Compare and Time Range Arc, plus premium bespoke and pack icons.
+
 ## 0.2.0
 
 - New free widgets: `ElasticStepTracker`, `PullChainToggle`, `SpringTooltip` and `SpringWaffleChart`.
