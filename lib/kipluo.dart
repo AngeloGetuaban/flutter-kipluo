@@ -85,6 +85,21 @@ export 'src/components/wave8_feedback.dart';
 export 'src/components/wave8_interactions.dart';
 export 'src/components/wave8_numbers.dart';
 
+// Wave 10 (3D Interactive Components)
+export 'src/components/wave10_3d.dart';
+
+// Wave 11 (Shaders & Backgrounds)
+export 'src/components/wave11_backgrounds.dart';
+export 'src/components/wave11_shaders.dart';
+
+// Wave 12 (Heroes & Features)
+export 'src/components/wave12_features.dart';
+export 'src/components/wave12_heroes.dart';
+
+// Wave 13 (Pricing & Testimonials)
+export 'src/components/wave13_pricing.dart';
+export 'src/components/wave13_testimonials.dart';
+
 // Textured Loaders (16 total)
 export 'src/loaders/loader_base.dart';
 export 'src/loaders/paper_plane_loader.dart';

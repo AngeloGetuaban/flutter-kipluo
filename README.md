@@ -2,7 +2,7 @@
 
 Interactive Flutter widgets with real spring physics, touch gestures and synthesized spatial sound. They keep behaving when people drag, fling, spam and interrupt them.
 
-This package is the free part of [Kipluo](https://kipluo.com): the engine plus 64 free widgets and loaders and 638 free animated icons. Premium widgets install as Dart source from [kipluo.com](https://kipluo.com/pricing).
+This package is the free part of [Kipluo](https://kipluo.com): the engine plus 78 free widgets and loaders and 638 free animated icons. Premium widgets install as Dart source from [kipluo.com](https://kipluo.com/pricing).
 
 ```bash
 flutter pub add kipluo
@@ -25,12 +25,18 @@ KipluoTheme(
 
 ## What's free
 
-- **Interactions:** MagneticSurface, HoldToConfirm, TiltCard, ElasticAccordion, SwipeToUnlock, InfiniteMarquee, ExpandableSearchPill, ElasticStepTracker, SpringDrawerHandle, SpringSplitPane, SpotlightBentoCard, SignaturePad
+- **Interactions:** MagneticSurface, HoldToConfirm, TiltCard, ElasticAccordion, SwipeToUnlock, InfiniteMarquee, ExpandableSearchPill, ElasticStepTracker, SpringDrawerHandle, SpringSplitPane, SpotlightBentoCard, SignaturePad, Flip3DCard
 - **Feedback:** FavoriteToggle, CopyFeedback, ConfettiBurst, ShakeInput, SuccessCheck, ReactionPickerBar, InlineStatusPill, SpringTooltip, InlineConfirmPill, BannerAnnouncement, StepChecklistCard
-- **Controls:** SpringToggle, AnimatedTabs, StepperInput, StarRating, JellyCheckbox, OtpInput, SpringSegmentedControl, TagChipInput, PullChainToggle, SpringDateStrip, SpringMultiSelect, SpringCombobox, TactileRadioCards, SpringColorSwatches, PillFilterBar
+- **Controls:** SpringToggle, AnimatedTabs, StepperInput, StarRating, JellyCheckbox, OtpInput, SpringSegmentedControl, TagChipInput, PullChainToggle, SpringDateStrip, SpringMultiSelect, SpringCombobox, TactileRadioCards, SpringColorSwatches, PillFilterBar, Floating3DNav
 - **Numbers:** RollingCounter, SpringBadgeCount, CountUpStat, CountdownRing, SlotMachineCounter, MilestoneOdometer, BatteryLevelMeter, CountdownBlocks
 - **Charts:** DonutProgress, SpringSparkline, StackedProgressBar, SpringWaffleChart, SpringAreaSpark, StackedBarChart, WaterfallDeltaChart
 - **Loaders:** WormLoader, PixelProgressLoader, PaperPlaneLoader, TypingIndicator, BouncingCubeLoader, HourglassSandLoader, PendulumCradleLoader, VinylSpinLoader, IsometricCubeGridLoader, BrickBar3DLoader, KineticSpheres3DLoader
+- **Shaders:** FlutedGlassShader, MeshSilkShader
+- **Backgrounds:** AuroraBeamsBackground, SpotlightGridBackground
+- **Heroes:** EditorialSplitHero, ShaderHorizonHero
+- **Features:** LiveBentoFeatures, TabbedFeatureMatrix
+- **Pricing:** ToggleTierPricing, SegmentedPlanPricing
+- **Testimonials:** CoverflowTestimonials, MarqueeTestimonials
 - **Icons:** free bespoke icons such as `KBellIcon()` and `KHeartIcon()`, plus the free icon pack: `KipluoIcon.bySlug('user-icon')`
 
 Browse all of them, live, at [kipluo.com/browse](https://kipluo.com/browse).

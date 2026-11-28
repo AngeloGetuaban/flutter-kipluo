@@ -1,3 +1,11 @@
+## 0.5.0
+
+- Full page sections, built to sit in your own product: `EditorialSplitHero` and `ShaderHorizonHero` heroes, `LiveBentoFeatures` and `TabbedFeatureMatrix` feature blocks, `ToggleTierPricing` and `SegmentedPlanPricing` pricing tables, and `CoverflowTestimonials` and `MarqueeTestimonials`.
+- Backgrounds and shaders with no extra dependencies: `AuroraBeamsBackground`, `SpotlightGridBackground` (its spotlight drifts on its own until touched), `FlutedGlassShader` and `MeshSilkShader`. Shader captions sit on a readable backing.
+- 3D components: `Floating3DNav` and `Flip3DCard`.
+- Hero particle backdrops fade out behind text, so headlines stay readable.
+- Premium additions (install with `npx kipluo add <name> --flutter`): 28 widgets and loaders, including six new 3D loaders (Wave Ribbon, Voxel Tetris, Flip Matrix, Sonar Ring, Scan Slab and Flux Ring), Step Deck 3D, Perspective Selector 3D, Extruded Gauge 3D, Arc Reveal 3D, Prism Wave, Dither Vortex and Aurora Nebula shaders, Kinetic Dot Field, and the remaining hero, feature, pricing and testimonial sections.
+
 ## 0.4.0
 
 - First 3D loaders, with no extra dependencies: `IsometricCubeGridLoader`, `BrickBar3DLoader` and `KineticSpheres3DLoader`. Drag to orbit them; determinate progress, complete and error states, reduced motion and Playful / Minimal / Mono styles all work.
